@@ -1,7 +1,8 @@
 from blog.models import BlogPost
 from blog.serializers import BlogPostSerializer, UserSerializer
-from rest_framework import viewsets
-from .permissions import permissions
+from rest_framework import viewsets, mixins
+from rest_framework import permissions
+from .permissions import IsOwnerReadOnly
 from django.contrib.auth.models import User
 
 
@@ -9,13 +10,16 @@ from django.contrib.auth.models import User
 class BlogPostViewSet(viewsets.ModelViewSet):
     queryset = BlogPost.objects.all()
     serializer_class = BlogPostSerializer
-    permission_class = [permissions.IsauthenticatedOrReadOnly,
-    IsownerOrReadOnly]
+    permission_class = [permissions.IsAuthenticatedOrReadOnly,
+    IsOwnerReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
     
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
+class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_class = [permissions.AllowAny,]
+
+    
