@@ -1,0 +1,16 @@
+# Python bytecode files
+Blogging/Blogging/__pycache__/
+
+blog/__pycache__/
+
+Blogging/blog/migrations
+
+# Local database file
+tut/db.sqlite3
+
+# Sensitive settings file
+Blogging/Blogging/settings.py
+
+venv
+
+.env
