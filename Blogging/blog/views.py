@@ -13,6 +13,15 @@ class BlogPostViewSet(viewsets.ModelViewSet):
     permission_class = [permissions.IsAuthenticatedOrReadOnly,
     IsOwnerReadOnly]
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        user = self.request.user
+        if user.is_authenticated:
+            queryset = queryset.filter(author=user)
+
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
